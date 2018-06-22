@@ -1,24 +1,42 @@
 import React, {Component} from "react";
 import SearchForm from "../SearchForm";
-import ResultList from "../ResultList";
+import ResultList1 from "../ResultList1";
 import SavedArticles from "../SavedArticles";
-import Navbar from "../Navbar";
 import API from "../../utils/API";
+import DB from "../../utils/DB";
 
 class Wrapper extends Component {
   state = {
-    
       topic: "",
       startYear: "",
       endYear: "",
-    results: []
+    results: [],
+    saved: []
   };
 
   //methods, lots of methods
+  componentDidMount() {
+    this.loadArticles();
+  };
+
+  loadArticles = () => {
+    DB.getArticles()
+    .then(res =>
+      this.setState({saved: res.data}))
+    .catch(err => console.log(err));
+  };
+  
+  deleteArticle = id => {
+    DB.deleteArticle(id)
+    .then(res => this.loadArticles())
+    .catch(err => console.log(err));
+  };
+
+
   handleFormSubmit = event => {
     event.preventDefault();
     this.searchArticle(this.state.info);
-  }
+  };
 
   handleInputChange = event => {
     const name = event.target.name;
@@ -28,10 +46,13 @@ class Wrapper extends Component {
     });
   };
 
-  saveArticle = event => {
-    event.preventDefault();
-    //push this to the database
-  }
+  // saveArticle = event => {
+  //   event.preventDefault();
+  //   DB.saveBook({
+  //     title: this.state.title
+  //   })
+  //   //push this to the database, might need to move this to different component
+  // }
 
   //most likely need a method to get articles from db
 
@@ -52,7 +73,7 @@ class Wrapper extends Component {
   render() {
     return (
       <div>
-        {/* <Navbar /> */}
+        <h2>Search Database</h2>
         <SearchForm
           topic={this.state.topic}
           startYear={this.state.startYear}
@@ -60,11 +81,13 @@ class Wrapper extends Component {
           handleFormSubmit={this.handleFormSubmit}
           handleInputChange={this.handleInputChange}
         />
-        <ResultList
+        <h2>Search Results</h2>
+        <ResultList1
           results={this.state.results}
           handleClick={this.saveArticle}
         />
-        {/* <SavedArticles /> */}
+        <h2>Saved Articles</h2>
+        <SavedArticles />
       </div>
     );
   }
