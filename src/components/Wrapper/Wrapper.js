@@ -3,13 +3,14 @@ import SearchForm from "../SearchForm";
 import ResultList1 from "../ResultList1";
 import SavedArticles from "../SavedArticles";
 import API from "../../utils/API";
+import API_id from "../../utils/API_id";
 import DB from "../../utils/DB";
 
 class Wrapper extends Component {
   state = {
-      topic: "",
-      startYear: "",
-      endYear: "",
+    topic: "",
+    startYear: "",
+    endYear: "",
     results: [],
     saved: []
   };
@@ -21,8 +22,8 @@ class Wrapper extends Component {
 
   loadArticles = () => {
     DB.getArticles()
-    .then(res =>
-      this.setState({saved: res.data}))
+    .then(res => API_id.search(res))
+    .then(res => this.setState({saved: res.data.response.docs}))
     .catch(err => console.log(err));
   };
   
@@ -46,18 +47,8 @@ class Wrapper extends Component {
     });
   };
 
-  // saveArticle = event => {
-  //   event.preventDefault();
-  //   DB.saveBook({
-  //     title: this.state.title
-  //   })
-  //   //push this to the database, might need to move this to different component
-  // }
-
-  //most likely need a method to get articles from db
-
   searchArticle = () => {
-    let query = {
+    const query = {
       topic: this.state.topic,
       startYear: this.state.startYear,
       endYear: this.state.endYear
@@ -84,10 +75,12 @@ class Wrapper extends Component {
         <h2>Search Results</h2>
         <ResultList1
           results={this.state.results}
-          handleClick={this.saveArticle}
+          loadArticles={this.loadArticles}
         />
         <h2>Saved Articles</h2>
-        <SavedArticles />
+        <SavedArticles 
+           results={this.state.saved}
+        />
       </div>
     );
   }

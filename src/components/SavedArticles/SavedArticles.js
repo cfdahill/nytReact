@@ -3,7 +3,7 @@ import moment from "moment";
 
 const SavedArticles = props => (
   <ul className="list-group">
-    {props.results.map(result => (
+    {props.saved.map(result => (
       <a href={result.web_url} target="blank">
         <li className="list-group-ite" key={result._id}>
           <h2>{result.headline.main}</h2>

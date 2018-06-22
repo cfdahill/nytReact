@@ -4,29 +4,26 @@ import DB from "../../utils/DB";
 
 class ResultList1 extends Component {
   state = {
-    _id: "",
-    title: "",
-    url: "",
-    date: ""
+    _id: ""
   };
 
   handleClick = event => {
     event.preventDefault();
-    this.setState({
-      _id: result._id,
-      title: result.headline.main,
-      url: result.web_url,
-      date:result.pub_date
+    const id = event.target.id;  
+    DB.saveArticle({
+     _id: id,
     })
-    DB.saveBook({
-     
-    })
+      .then(res => {
+        this.props.loadArticles();
+        console.log(`Saved ${id} to the database`);
+      })
+      .catch(err => console.log(err));
   };
 
   render() {
     return(
   <ul className="list-group">
-    {props.results.map(result => (
+    {this.props.results.map(result => (
       <a href={result.web_url} target="blank">
         <li className="list-group-ite" key={result._id}>
           <h2>{result.headline.main}</h2>
