@@ -1,6 +1,10 @@
 const path = require("path");
 const router = require("express").Router();
 const apiRoutes = require("./api");
+const mongoose = require("mongoose")
+
+
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/nytreact");
 
 router.use("/api", apiRoutes);
 
