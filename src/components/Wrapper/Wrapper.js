@@ -16,16 +16,16 @@ class Wrapper extends Component {
   };
 
   //methods, lots of methods
-  componentDidMount() {
-    this.loadArticles();
-  };
+  // componentDidMount() {
+  //   this.loadArticles();
+  // };
 
-  loadArticles = () => {
-    DB.getArticles()
-    .then(res => API_id.search(res))
-    .then(res => this.setState({saved: res.data.response.docs}))
-    .catch(err => console.log(err));
-  };
+  // loadArticles = () => {
+  //   DB.getArticles()
+  //   .then(res => API_id.search(res))
+  //   .then(res => this.setState({saved: res.data.response.docs}))
+  //   .catch(err => console.log(err));
+  // };
   
   deleteArticle = id => {
     DB.deleteArticle(id)
@@ -78,9 +78,9 @@ class Wrapper extends Component {
           loadArticles={this.loadArticles}
         />
         <h2>Saved Articles</h2>
-        <SavedArticles 
+        {/* <SavedArticles 
            results={this.state.saved}
-        />
+        /> */}
       </div>
     );
   }
